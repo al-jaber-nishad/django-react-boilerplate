@@ -1,17 +1,18 @@
-FROM python:3.9-slim
+FROM python:3.9 AS build
 
-# Set environment variables for Python
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
-
-# Set the working directory in the container
 WORKDIR /app
 
 COPY requirements.txt /app/
+
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . /app/
+FROM python:3.9-slim
 
-# Expose and run the server
+WORKDIR /app
+
+COPY --from=build . /app
+
+
 EXPOSE 8000
+
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
