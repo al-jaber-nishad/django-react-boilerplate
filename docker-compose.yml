@@ -1,0 +1,31 @@
+version: "3.3"
+
+networks:
+  server-bridge:
+    driver: bridge
+
+services:
+  frontend:
+    image: aljabernishad/django-react-frontend:latest
+    env_file:
+      - $PWD/.env.local
+    ports:
+      - "3000:80"
+    volumes:
+      - ./frontend:/app
+    depends_on:
+      - backend
+    networks:
+      - server-bridge
+
+  backend:
+    image: aljabernishad/django-react-backend:latest
+    env_file:
+      - $PWD/.env.local
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    networks:
+      - server-bridge
+
