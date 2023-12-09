@@ -5,10 +5,23 @@ networks:
     driver: bridge
 
 services:
+  backend:
+    image: aljabernishad/django-react-backend:latest
+    container_name: backend
+    restart: always
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    networks:
+      - server-bridge
+
   frontend:
     image: aljabernishad/django-react-frontend:latest
     env_file:
-      - $PWD/.env.local
+      - .env.local
+    container_name: frontend
+    restart: always
     ports:
       - "3000:80"
     volumes:
@@ -17,15 +30,3 @@ services:
       - backend
     networks:
       - server-bridge
-
-  backend:
-    image: aljabernishad/django-react-backend:latest
-    env_file:
-      - $PWD/.env.local
-    ports:
-      - "8000:8000"
-    volumes:
-      - ./backend:/app
-    networks:
-      - server-bridge
-
