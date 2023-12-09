@@ -19,13 +19,16 @@ services:
   frontend:
     image: aljabernishad/django-react-frontend:latest
     env_file:
-      - .env.local
+      - .env
     container_name: frontend
     restart: always
     ports:
       - "3000:80"
+    command: ["npm", "run", "build"]
     volumes:
       - ./frontend:/app
+      - ./frontend/build:/app/build
+      - ./frontend/build:/usr/share/nginx/html
     depends_on:
       - backend
     networks:
