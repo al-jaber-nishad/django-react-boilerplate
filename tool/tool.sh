@@ -20,6 +20,12 @@ stop() {
     docker stop "$container_name"
 }
 
+dumpdb() {
+    local container_name=$1
+    local output_file=$2
+    docker exec "$container_name" sh -c 'exec python manage.py dumpdata' > "$output_file"
+}
+
 # Main execution
 
 case "$1" in
@@ -32,8 +38,11 @@ case "$1" in
     "stop")
         stop "$2"
         ;;
+    "dumpdb")
+        dumpdb "$2" "$3"
+        ;;
     *)
-        echo "Usage: $0 {build|run|stop}"
+        echo "Usage: $0 {build|run|stop|dumpdb}"
         exit 1
         ;;
 esac
