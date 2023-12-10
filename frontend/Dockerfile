@@ -1,13 +1,14 @@
-# Stage 1: Build React app
-FROM node:14 as react-builder
+# Stage 1
+FROM node:14.21-slim as react-builder
 WORKDIR /app
-COPY package*.json ./
+COPY public/ /react-docker-example/public
+COPY src/ /react-docker-example/src
+COPY package.json /react-docker-example/
 RUN npm install
 COPY . /app
-RUN npm run build
 
-# Stage 2: Development image with hot reloading
-FROM node:14 
+# Stage 2
+FROM node:14.21-slim as development
 WORKDIR /app
 COPY --from=react-builder /app /app
 EXPOSE 3000
